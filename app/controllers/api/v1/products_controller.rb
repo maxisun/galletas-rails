@@ -1,6 +1,8 @@
 class Api::V1::ProductsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :product_not_found
   #rescue_from ActionController::ParameterMissing, :with => :product_not_created
+  before_action :authenticate_request!, except: [:index]
+  before_action :load_current_user!, only: [:create, :destroy]
   before_action :set_product, only: [:show, :update, :destroy]
 
   # GET /products
@@ -14,12 +16,15 @@ class Api::V1::ProductsController < ApplicationController
 
   # POST /products
   def create
-    @product = Product.new(product_params)
-    if @product.save
-      render 'show', status: 201
+    if @current_user.is_admin?
+      @product = Product.new(product_params)
+      if @product.save
+        render 'show', status: 201
+      else
+        render :json => { :errors => @product.errors.full_messages }, status: 400
+      end
     else
-      render :json => { :errors => @product.errors.full_messages }, status: 400
-      #render 'error', status: 400
+      render json: {error: "Unauthorized: You must be an admin to perform that action"}, status: :unauthorized
     end
   end
 
@@ -32,10 +37,14 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def destroy
-    if @product.destroy
-      render json: { message: "Product Successfully Deleted." }, status: 200
+    if @current_user.is_admin?
+      if @product.destroy
+        render json: { message: "Product Successfully Deleted." }, status: 200
+      else
+        product_not_found
+      end
     else
-      product_not_found
+      render json: {error: "Unauthorized: You must be an admin to perform that action"}, status: :unauthorized
     end
   end
 
