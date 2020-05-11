@@ -5,7 +5,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products, defaults: { format: :json }
+      resources :products, defaults: { format: :json } do
+        resources :likes, only: :create , defaults: { format: :json }
+      end
       resources :users, only: :create do
         collection do
           post 'login'

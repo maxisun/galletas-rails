@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_162436) do
+ActiveRecord::Schema.define(version: 2020_05_11_175234) do
+
+  create_table "likes", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_likes_on_product_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
 
   create_table "products", force: :cascade do |t|
     t.string "name"
@@ -29,4 +38,6 @@ ActiveRecord::Schema.define(version: 2020_05_07_162436) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "likes", "products"
+  add_foreign_key "likes", "users"
 end
