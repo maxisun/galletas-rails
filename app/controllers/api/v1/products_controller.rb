@@ -29,7 +29,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def update
-    if @product.update(product_params)
+    if @product.update(product_update_params)
       render 'show', status: 200
     else
       render :json => { :errors => @product.errors.full_messages }, status: 400
@@ -60,6 +60,10 @@ class Api::V1::ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :description, :stock, :price)
+  end
+
+  def product_update_params
+    params.require(:product).permit(:price)
   end
 
   def set_product
