@@ -29,7 +29,11 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def update
+    old_price = @product.price
     if @product.update(product_update_params)
+      puts @product.price
+      puts old_price
+      PriceLog.create(product_id: @product.id, user_id: @current_user.id, previousPrice: old_price, updatedPrice: @product.price)
       render 'show', status: 200
     else
       render :json => { :errors => @product.errors.full_messages }, status: 400
