@@ -7,8 +7,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :products, defaults: { format: :json } do
         get '/purchases/logs', on: :collection
+        resources :purchases, only: :create
         get '/prices/logs', on: :collection
-        resources :likes, only: :create , defaults: { format: :json }
+        resources :likes, only: :create #, defaults: { format: :json }
       end
       resources :users, only: :create do
         collection do
