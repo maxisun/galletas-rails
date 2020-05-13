@@ -1,13 +1,16 @@
 class Api::V1::ProductsController < ApplicationController
+  rescue_from Pagy::OverflowError, :with => :redirect_to_last_page
+  rescue_from Pagy::VariableError, :with => :page_and_size_error
   rescue_from ActiveRecord::RecordNotFound, :with => :product_not_found
   #rescue_from ActionController::ParameterMissing, :with => :product_not_created
   before_action :authenticate_request!, except: [:index]
   before_action :load_current_user!, only: [:create, :destroy]
   before_action :set_product, only: [:show, :update, :destroy]
+  after_action { pagy_headers_merge(@pagy) if @pagy }
 
   # GET /products
   def index
-    @products = Product.all
+    @pagy, @products = pagy(Product.all, page: params[:page], items: params[:per_page])
   end
 
   # GET /product/:id
@@ -72,6 +75,19 @@ class Api::V1::ProductsController < ApplicationController
 
   def set_product
     @product = Product.find(params[:id])
+  end
+
+  def redirect_to_last_page(exception)
+    #redirect_to url_for(page: exception.pagy.last)#, notice: "Page ##{params[:page]} is overflowing. Showing page #{exception.pagy.last} instead."
+    render json: {error: "Page ##{params[:page]} is overflowing."}, status: 400
+  end
+
+  def page_and_size_error(exception)
+    render json: {error: "page and per_page params must be >= 1"}
+  end
+
+  def sort_product
+
   end
 
 end

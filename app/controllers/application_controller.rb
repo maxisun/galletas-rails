@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include Pagy::Backend
   require 'jsonwebtoken'
 
   # Validates the token and user and sets the @current_user scope
