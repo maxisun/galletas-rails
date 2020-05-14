@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_13_142801) do
+ActiveRecord::Schema.define(version: 2020_05_14_195213) do
 
   create_table "likes", force: :cascade do |t|
     t.integer "product_id", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 2020_05_13_142801) do
     t.decimal "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "likes_count", default: 0, null: false
   end
 
   create_table "purchases", force: :cascade do |t|

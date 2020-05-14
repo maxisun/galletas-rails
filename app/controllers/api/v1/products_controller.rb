@@ -10,8 +10,19 @@ class Api::V1::ProductsController < ApplicationController
 
   # GET /products
   def index
-    @pagy, @products = pagy(Product.all, page: params[:page], items: params[:per_page])
-    #puts params[:sort][1..-1]
+    query = Product.name_asc #default
+    if params[:filter]
+      query = Product.search_name(params[:filter])
+    end
+    if params[:sort]
+      f = params[:sort].split(',').first
+      field = f[0] == '-' ? f[1..-1] : f
+      order = f[0] == '-' ? 'DESC' : 'ASC'
+      if Product.new.has_attribute?(field)
+        query = query.order("#{field} #{order}")
+      end
+    end
+    @pagy, @products = pagy(query, page: params[:page], items: params[:per_page])
   end
 
   # GET /product/:id
@@ -87,17 +98,16 @@ class Api::V1::ProductsController < ApplicationController
     render json: {error: "page and per_page params must be >= 1"}, status: 400
   end
 
-  #def sort_product
-  #  if params[:sort][0] == '-'
-  #    case params[:sort][1..-1]
-  #    when "name"
-  #      sort = "name DESC"
-  #    when "likes"
-        
-
-  #  else
-
-  #  end
-  #end
+  def sort_product
+    products = Product.all
+    if params[:sort]
+      f = params[:sort].split(',').first
+      field = f[0] == '-' ? f[1..-1] : f
+      order = f[0] == '-' ? 'DESC' : 'ASC'
+      if Product.new.has_attribute?(field)
+        products = products.order("#{field} #{order}")
+      end
+    end
+  end
 
 end

@@ -5,5 +5,5 @@ end
 
 json.products @products do |product|
   json.(product, :id, :name, :description, :stock, :price)
-  json.likes product.likes.count
+  json.likes product.likes_count
 end

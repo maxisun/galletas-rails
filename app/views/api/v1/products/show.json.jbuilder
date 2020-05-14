@@ -10,5 +10,6 @@ json.data do
     json.description @product.description
     json.stock @product.stock
     json.price @product.price
+    json.likes product.likes_count
   end
 end
