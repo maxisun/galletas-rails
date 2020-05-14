@@ -11,6 +11,7 @@ class Api::V1::ProductsController < ApplicationController
   # GET /products
   def index
     @pagy, @products = pagy(Product.all, page: params[:page], items: params[:per_page])
+    #puts params[:sort][1..-1]
   end
 
   # GET /product/:id
@@ -83,11 +84,20 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def page_and_size_error(exception)
-    render json: {error: "page and per_page params must be >= 1"}
+    render json: {error: "page and per_page params must be >= 1"}, status: 400
   end
 
-  def sort_product
+  #def sort_product
+  #  if params[:sort][0] == '-'
+  #    case params[:sort][1..-1]
+  #    when "name"
+  #      sort = "name DESC"
+  #    when "likes"
+        
 
-  end
+  #  else
+
+  #  end
+  #end
 
 end
