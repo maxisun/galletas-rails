@@ -10,7 +10,7 @@ class Api::V1::ProductsController < ApplicationController
 
   # GET /products
   def index
-    query = Product.name_asc #default
+    query = Product.all
     if params[:filter]
       query = Product.search_name(params[:filter])
     end
@@ -21,6 +21,8 @@ class Api::V1::ProductsController < ApplicationController
       if Product.new.has_attribute?(field)
         query = query.order("#{field} #{order}")
       end
+    else
+      query = query.name_asc
     end
     @pagy, @products = pagy(query, page: params[:page], items: params[:per_page])
   end
