@@ -12,9 +12,12 @@
 
 ActiveRecord::Schema.define(version: 2020_05_14_195213) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "likes", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "product_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["product_id"], name: "index_likes_on_product_id"
@@ -22,8 +25,8 @@ ActiveRecord::Schema.define(version: 2020_05_14_195213) do
   end
 
   create_table "price_logs", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "product_id", null: false
+    t.bigint "user_id", null: false
     t.decimal "previousPrice"
     t.decimal "updatedPrice"
     t.datetime "created_at"
@@ -42,8 +45,8 @@ ActiveRecord::Schema.define(version: 2020_05_14_195213) do
   end
 
   create_table "purchases", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "product_id", null: false
+    t.bigint "user_id", null: false
     t.integer "quantity"
     t.datetime "created_at"
     t.index ["product_id"], name: "index_purchases_on_product_id"
