@@ -11,7 +11,7 @@ Rails.application.routes.draw do
         get '/prices/logs', on: :collection
         resources :likes, only: :create #, defaults: { format: :json }
       end
-      resources :users, only: :create do
+      resources :users, only: [:create, :index] do
         collection do
           post 'login'
         end
