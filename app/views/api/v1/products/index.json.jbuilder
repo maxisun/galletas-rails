@@ -1,5 +1,5 @@
 #json.products @products, :id, :name, :description, :stock, :price
-json.links do
+json.linksbenji do
   json.self api_v1_products_url
 end
 
